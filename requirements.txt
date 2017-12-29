@@ -3,3 +3,4 @@ gunicorn
 wtforms
 passlib
 flask_mysqldb
+functools
