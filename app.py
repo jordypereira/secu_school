@@ -583,6 +583,6 @@ def deleteFile(folder, filename):
     filename = folder + "/" + filename
     return os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-if __name__ == '__main__':
-    app.secret_key = 'secret123'
-    app.run()
+# if __name__ == '__main__':
+#     app.secret_key = 'secret123'
+#     app.run()
