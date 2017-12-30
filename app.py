@@ -4,8 +4,6 @@ from flask_mysqldb import MySQL
 from passlib.hash import sha256_crypt
 from functools import wraps
 
-from flask_wtf import FlaskForm
-from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import StringField, TextAreaField, PasswordField, Form, validators
 from wtforms.validators import DataRequired
 
