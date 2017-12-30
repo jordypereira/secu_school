@@ -1,0 +1,16 @@
+.mw-150px{
+  max-width: 150px;
+}
+.mw-200px{
+  max-width: 200px;
+}
+
+@media only screen and (min-width: 768px) {
+  .btn-lg-lg{
+    padding: .5rem 1rem;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    border-radius: .3rem;
+  }
+
+}

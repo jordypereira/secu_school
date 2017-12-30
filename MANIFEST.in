@@ -1,0 +1,3 @@
+graft secu_school/templates
+graft secu_school/static
+include secu_school/secu_school.sql
