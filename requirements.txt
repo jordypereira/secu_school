@@ -4,3 +4,4 @@ wtforms
 passlib
 flask_mysqldb
 functools
+Flask-WTF

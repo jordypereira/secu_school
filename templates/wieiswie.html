@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Wie is Wie
+{% endblock %}
+
+{% block body %}
+
+<h1>Wie is wie</h1>
+<div class="row">
+
+{% for leraar in leraren %}
+<div class="col">
+  <div class="card mb-3" style="width: 12rem;">
+    <img class="card-img-top" src="{{ url_for('uploaded_file', folder='leraren', filename=leraar.foto) }}" alt="Foto {{leraar.naam}}{{leraar.voornaam}}">
+    <div class="card-body">
+      <h5 class="card-title">{{leraar.voornaam}} {{leraar.naam}}</h5>
+      <p class="card-text">{{leraar.email}}</p>
+      <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+    </div>
+  </div>
+</div>
+{% endfor %}
+</div>
+{% endblock %}

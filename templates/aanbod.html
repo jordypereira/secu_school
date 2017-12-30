@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Ons Aanbod
+{% endblock %}
+
+{% block body %}
+<h1>Ons Aanbod</h1>
+<p>Bekijk hier rustig al onze richtingen zodat je een verstandige keuze kunt maken!</p>
+<table class="table table-striped">
+  <tr>
+    <th>Naam</th>
+    <th>Omschrijving</th>
+  </tr>
+  {% for richting in richtingen %}
+    <tr>
+      <td>{{richting.naam}}</td>
+      <td>{{richting.omschrijving | safe}}</td>
+    </tr>
+  {% endfor %}
+</table>
+{% endblock %}
