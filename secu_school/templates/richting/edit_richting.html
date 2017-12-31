@@ -1,13 +1,13 @@
-{% extends 'layout.html' %}
+{% extends '../layout.html' %}
 
 {% block title %}
-Edit Richting
+Pas een Richting aan
 {% endblock %}
 
 {% block body %}
 
 <h1>Edit Richting</h1>
-{% from "includes/_formhelpers.html" import render_field %}
+{% from "../includes/_formhelpers.html" import render_field %}
 <form action="" method="post">
   <div class="form-group">
     {{render_field(form.naam, class_="form-control")}}

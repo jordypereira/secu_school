@@ -1,4 +1,4 @@
-{% extends 'layout.html' %}
+{% extends '../layout.html' %}
 
 {% block title %}
 Voeg een Klas Toe
@@ -7,7 +7,7 @@ Voeg een Klas Toe
 {% block body %}
 
 <h1>Voeg een Klas toe</h1>
-{% from "includes/_formhelpers.html" import render_field %}
+{% from "../includes/_formhelpers.html" import render_field %}
 <form action="" method="post">
   <div class="form-group">
     {{render_field(form.naam, class_="form-control")}}
@@ -19,9 +19,7 @@ Voeg een Klas Toe
     <label for="richting">Richting</label>
     <select class="form-control" id="richting" name="richting">
       {% for richting in richtingen %}
-      <option value="{{richting.id}}"
-      {{ 'selected' if (klas.richting == richting.id)  }}>
-      {{richting.naam}}</option>
+      <option value="{{richting.id}}">{{richting.naam}}</option>
       {% endfor %}
     </select>
   </div>
@@ -29,12 +27,11 @@ Voeg een Klas Toe
     <label for="leraar">Leraar</label>
     <select class="form-control" id="leraar" name="leraar">
       {% for leraar in leraren %}
-      <option value="{{leraar.id}}"
-      {{ 'selected' if (klas.leraar == leraar.id)}}>
-        {{leraar.voornaam}} {{leraar.naam}}</option>
+      <option value="{{leraar.id}}">{{leraar.voornaam}} {{leraar.naam}}</option>
       {% endfor %}
     </select>
   </div>
+  {{ form.csrf_token }}
   <p><input type="submit" class="btn btn-primary" value="Submit"></p>
 </form>
 

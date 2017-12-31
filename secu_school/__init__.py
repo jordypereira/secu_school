@@ -1,14 +1,18 @@
-from flask import Flask, render_template, flash, redirect, url_for, session, logging, request, send_from_directory
+from flask import Flask
+from flask_mysqldb import MySQL
+from flask_sqlalchemy import SQLAlchemy
 
-from .views import app
+from .views.home import home
+from .views.dashboard import dashboard
+from .views.klas import klas
+from .views.richting import richting
 
 app = Flask(__name__, instance_relative_config=True)
-# Load the default configuration
+app.register_blueprint(home)
+app.register_blueprint(dashboard)
+app.register_blueprint(klas)
+app.register_blueprint(richting)
+
 app.config.from_object('config.default')
-
-# Load the configuration from the instance folder
 app.config.from_pyfile('config.py')
-
-# Load the file specified by the APP_CONFIG_FILE environment variable
-# Variables defined here will override those in the default configuration
 app.config.from_object('config.development')

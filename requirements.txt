@@ -5,3 +5,4 @@ passlib
 flask_mysqldb
 functools
 Flask-WTF
+Flask-SQLAlchemy

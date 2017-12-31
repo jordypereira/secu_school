@@ -1,0 +1,11 @@
+{% macro nav_link(endpoint, text) %}
+  {% if request.endpoint.endswith(endpoint) %}
+    <li class="nav-item active">
+      <a class="nav-link" href="{{ url_for(endpoint) }}">{{text}}<span class="sr-only">(current)</span></a>
+    </li>
+  {% else %}
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url_for(endpoint) }}">{{text}}</a>
+    </li>
+  {% endif %}
+{% endmacro %}

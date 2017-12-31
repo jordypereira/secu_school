@@ -1,3 +1,5 @@
+{% from "macros.html" import nav_link with context %}
+
 <nav class="navbar navbar-expand-md navbar-light bg-light">
       <a class="navbar-brand" href="/">Secundaire School</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -6,31 +8,16 @@
 
       <div class="collapse navbar-collapse" id="navbar">
         <ul class="navbar-nav mr-auto">
-          <!-- <li class="nav-item">
-            <a class="nav-link" href="/">Home</a>
-          </li> -->
-          <li class="nav-item">
-            <a class="nav-link" href="/aanbod">Ons aanbod</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/wieiswie">Wie is wie</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/contact">Contact</a>
-          </li>
+          {{ nav_link('/aanbod', 'Ons aanbod') }}
+          {{ nav_link('/wieiswie', 'Wie is wie') }}
+          {{ nav_link('/contact', 'Contact') }}
         </ul>
         <ul class="navbar-nav">
         {% if not session.logged_in %}
-          <li class="nav-item">
-            <a class="nav-link" href="/login">Intranet</a>
-          </li>
-          {% else %}
-          <li class="nav-item">
-            <a class="nav-link" href="/intranet">Intranet</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/logout">Logout</a>
-          </li>
+          {{ nav_link('/login', 'Intranet') }}
+        {% else %}
+          {{ nav_link('/intranet', 'Intranet') }}
+          {{ nav_link('/logout', 'Logout') }}
           {% endif %}
         </ul>
       </div>
