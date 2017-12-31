@@ -1,10 +1,20 @@
-from flask import Blueprint, render_template, flash, redirect, url_for, logging, request
-from flask_mysqldb import MySQL
-from .. import app
+from flask import Blueprint, render_template, flash, redirect, url_for, logging, request, session
+from ..extensions import mysql
+from functools import wraps
 from ..forms import KlasForm
 
-klas = Blueprint('klas', __name__)
+klas = Blueprint('klas', __name__, template_folder='../templates/klas')
 
+# Check if user logged in
+def is_logged_in(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if 'logged_in' in session:
+            return f(*args, **kwargs)
+        else:
+            flash("Unauthorized, Please login", 'danger')
+            return redirect(url_for('dashboard.login'))
+    return wrap
 
 # Add Klas
 @klas.route('/add_klas', methods=['GET', 'POST'])
@@ -37,8 +47,8 @@ def add_klas():
 
         flash('Klas Aangemaakt', 'success')
 
-        return redirect(url_for('intranet'))
-    return render_template('klas/add_klas.html', form=form, richtingen = richtingen, leraren = leraren)
+        return redirect(url_for('dashboard.intranet'))
+    return render_template('add_klas.html', form=form, richtingen = richtingen, leraren = leraren)
     cur.close()
 
 # Edit Klas
@@ -81,6 +91,6 @@ def edit_klas(id):
 
         flash('Richting Updated', 'success')
 
-        return redirect(url_for('intranet'))
+        return redirect(url_for('dashboard.intranet'))
 
-    return render_template('klas/edit_klas.html', form=form, klas=klas, richtingen=richtingen, leraren=leraren)
+    return render_template('edit_klas.html', form=form, klas=klas, richtingen=richtingen, leraren=leraren)

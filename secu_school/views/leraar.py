@@ -1,19 +1,26 @@
-from flask import Blueprint, render_template, flash, redirect, url_for, logging, request
-from .. import app
+from flask import Blueprint, render_template, flash, redirect, url_for, logging, request, session
 from ..forms import LeraarForm
-
 import os
-from flask_mysqldb import MySQL
-from wtforms import StringField, Form, validators
+from ..extensions import mysql
 from werkzeug.utils import secure_filename
+from functools import wraps
 
 
-leraar = Blueprint('leraar', __name__)
+leraar = Blueprint('leraar', __name__, template_folder='../templates/leraar')
 
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
-
+# Check if user logged in
+def is_logged_in(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if 'logged_in' in session:
+            return f(*args, **kwargs)
+        else:
+            flash("Unauthorized, Please login", 'danger')
+            return redirect(url_for('dashboard.login'))
+    return wrap
 # Check the file
 def allowed_file(filename):
     return '.' in filename and \
@@ -23,8 +30,8 @@ def allowed_file(filename):
 @leraar.route('/add_leraar', methods=['GET', 'POST'])
 @is_logged_in
 def add_leraar():
-    form = LeraarForm(request.form)
-    if request.method == 'POST' and form.validate():
+    form = LeraarForm()
+    if form.validate_on_submit():
          # check if the post request has the file part
         if 'file' not in request.files:
             flash('No file part')
@@ -57,7 +64,7 @@ def add_leraar():
 
             flash('Leerkracht Toegevoegd', 'success')
 
-            return redirect(url_for('intranet'))
+            return redirect(url_for('dashboard.intranet'))
 
     return render_template('add_leraar.html', form=form)
 
@@ -75,14 +82,14 @@ def edit_leraar(id):
     leraar = cur.fetchone()
 
     # Get form
-    form = LeraarForm(request.form)
+    form = LeraarForm()
 
     # Populate leraar form fields
     form.naam.data = leraar['naam']
     form.voornaam.data = leraar['voornaam']
     form.email.data = leraar['email']
 
-    if request.method == 'POST' and form.validate():
+    if form.validate_on_submit():
         naam = request.form['naam']
         voornaam = request.form['voornaam']
         email = request.form['email']
@@ -133,5 +140,5 @@ def edit_leraar(id):
 
         flash('Leraar Updated', 'success')
 
-        return redirect(url_for('intranet'))
+        return redirect(url_for('dashboard.intranet'))
     return render_template('edit_leraar.html', form=form)

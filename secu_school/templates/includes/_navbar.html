@@ -1,4 +1,4 @@
-{% from "macros.html" import nav_link with context %}
+{% from "includes/macros.html" import nav_link with context %}
 
 <nav class="navbar navbar-expand-md navbar-light bg-light">
       <a class="navbar-brand" href="/">Secundaire School</a>
@@ -8,16 +8,16 @@
 
       <div class="collapse navbar-collapse" id="navbar">
         <ul class="navbar-nav mr-auto">
-          {{ nav_link('/aanbod', 'Ons aanbod') }}
-          {{ nav_link('/wieiswie', 'Wie is wie') }}
-          {{ nav_link('/contact', 'Contact') }}
+          {{ nav_link('home.aanbod', 'Ons aanbod') }}
+          {{ nav_link('home.wieiswie', 'Wie is wie') }}
+          {{ nav_link('home.contact', 'Contact') }}
         </ul>
         <ul class="navbar-nav">
         {% if not session.logged_in %}
-          {{ nav_link('/login', 'Intranet') }}
+          {{ nav_link('dashboard.login', 'Intranet') }}
         {% else %}
-          {{ nav_link('/intranet', 'Intranet') }}
-          {{ nav_link('/logout', 'Logout') }}
+          {{ nav_link('dashboard.intranet', 'Intranet') }}
+          {{ nav_link('dashboard.logout', 'Logout') }}
           {% endif %}
         </ul>
       </div>

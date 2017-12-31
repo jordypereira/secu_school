@@ -1,11 +1,11 @@
-from flask import Blueprint, render_template, request
-from .. import app
+from flask import Blueprint, render_template, request, abort
+from jinja2 import TemplateNotFound
 from ..forms import ContactForm
-from flask_mysqldb import MySQL
 from wtforms import StringField, TextAreaField, PasswordField, Form, validators
+from ..extensions import mysql
 
-home = Blueprint('home', __name__)
 
+home = Blueprint('home', __name__, template_folder='../templates/home/')
 # Index
 @home.route('/')
 def index():
@@ -23,7 +23,10 @@ def aanbod():
         return render_template('aanbod.html', richtingen = richtingen)
     else:
         msg = 'Geen richtingen in het systeem.'
-        return render_template('aanbod.html', msg=msg)
+        try:
+            return render_template('home/aanbod.html', msg=msg)
+        except TemplateNotFound:
+            abort(404)
     cur.close()
 
 # Wie is Wie
@@ -64,6 +67,6 @@ def contact():
 
         flash('Je bericht is verstuurd', 'success')
 
-        return redirect(url_for('contact'))
+        return redirect(url_for('home.contact'))
 
     return render_template('contact.html', form=form)

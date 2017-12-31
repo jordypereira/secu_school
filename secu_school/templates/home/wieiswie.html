@@ -1,4 +1,4 @@
-{% extends '../layout.html' %}
+{% extends 'layout.html' %}
 
 {% block title %}
 Wie is Wie
@@ -12,7 +12,7 @@ Wie is Wie
 {% for leraar in leraren %}
 <div class="col">
   <div class="card mb-3" style="width: 12rem;">
-    <img class="card-img-top" src="{{ url_for('uploaded_file', folder='leraren', filename=leraar.foto) }}" alt="Foto {{leraar.naam}}{{leraar.voornaam}}">
+    <img class="card-img-top" src="{{ url_for('dashboard.uploaded_file', folder='leraren', filename=leraar.foto) }}" alt="Foto {{leraar.naam}}{{leraar.voornaam}}">
     <div class="card-body">
       <h5 class="card-title">{{leraar.voornaam}} {{leraar.naam}}</h5>
       <p class="card-text">{{leraar.email}}</p>

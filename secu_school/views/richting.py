@@ -1,23 +1,30 @@
-from flask import Blueprint, render_template, flash, redirect, url_for, logging, request
-from flask_mysqldb import MySQL
-from wtforms import StringField, TextAreaField, Form, validators
+from flask import Blueprint, render_template, flash, redirect, url_for, logging, request, session
+from ..forms import RichtingForm
+from ..extensions import mysql
+from functools import wraps
 
-richting = Blueprint('richting', __name__)
+richting = Blueprint('richting', __name__, template_folder='../templates/richting')
 
 
-# Richting Form Class
-class RichtingForm(Form):
-    naam = StringField('Naam', [validators.Length(min=1, max=200)])
-    omschrijving = TextAreaField('Omschrijving', [validators.Length(min=1)])
+# Check if user logged in
+def is_logged_in(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if 'logged_in' in session:
+            return f(*args, **kwargs)
+        else:
+            flash("Unauthorized, Please login", 'danger')
+            return redirect(url_for('dashboard.login'))
+    return wrap
 
 # Add Richting
 @richting.route('/add_richting', methods=['GET', 'POST'])
 @is_logged_in
 def add_richting():
 
-    form = RichtingForm(request.form)
+    form = RichtingForm()
 
-    if request.method == "POST" and form.validate():
+    if form.validate_on_submit():
         naam = form.naam.data
         omschrijving = form.omschrijving.data
 
@@ -32,7 +39,7 @@ def add_richting():
 
         flash('Richting Aangemaakt', 'success')
 
-        return redirect(url_for('intranet'))
+        return redirect(url_for('dashboard.intranet'))
     return render_template('add_richting.html', form=form)
 
 # Edit Richting
@@ -48,13 +55,13 @@ def edit_richting(id):
     richting = cur.fetchone()
 
     # Get form
-    form = RichtingForm(request.form)
+    form = RichtingForm()
 
     # Populate article form fields
     form.naam.data = richting['naam']
     form.omschrijving.data = richting['omschrijving']
 
-    if request.method == 'POST' and form.validate():
+    if form.validate_on_submit():
         naam = request.form['naam']
         omschrijving = request.form['omschrijving']
 
@@ -69,5 +76,5 @@ def edit_richting(id):
 
         flash('Richting Updated', 'success')
 
-        return redirect(url_for('intranet'))
+        return redirect(url_for('dashboard.intranet'))
     return render_template('edit_richting.html', form=form)

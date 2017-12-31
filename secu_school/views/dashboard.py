@@ -1,27 +1,26 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, session, logging, request, send_from_directory
-from .. import app
 from ..forms import RegisterForm
-
 from passlib.hash import sha256_crypt
 from functools import wraps
 
 from wtforms import StringField, PasswordField, Form, validators
 
 from werkzeug.utils import secure_filename
+from ..extensions import mysql
 
 
-dashboard = Blueprint('dashboard', __name__)
+dashboard = Blueprint('dashboard', __name__, template_folder='../templates/dashboard')
 
 
 # Return upload folder
-@app.route('/uploads/<folder>/<filename>')
+@dashboard.route('/uploads/<folder>/<filename>')
 def uploaded_file(folder, filename):
     filename = folder + "/" + filename
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+    return send_from_directory(dashboard.config['UPLOAD_FOLDER'], filename)
 
 
 # User Register
-@app.route('/register', methods=['GET', 'POST'])
+@dashboard.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm(request.form)
     if request.method == 'POST' and form.validate():
@@ -42,12 +41,12 @@ def register():
 
         flash('Je account is geregistreerd in de database en je kan nu inloggen.', 'success')
 
-        return redirect(url_for('login'))
+        return redirect(url_for('dashboard.login'))
 
     return render_template('register.html', form=form)
 
 # Login
-@app.route('/login', methods=['GET', 'POST'])
+@dashboard.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         #Get Form Fields
@@ -74,7 +73,7 @@ def login():
                 session['name'] = name
 
                 flash('Je bent nu ingelogd.', 'success')
-                return redirect(url_for('intranet'))
+                return redirect(url_for('dashboard.intranet'))
             else:
                 error = 'Foute login'
                 return render_template('login.html', error=error)
@@ -93,7 +92,7 @@ def is_logged_in(f):
             return f(*args, **kwargs)
         else:
             flash("Unauthorized, Please login", 'danger')
-            return redirect(url_for('login'))
+            return redirect(url_for('dashboard.login'))
     return wrap
 
 # Logout
@@ -102,7 +101,7 @@ def is_logged_in(f):
 def logout():
     session.clear()
     flash('You are now logged out', 'success')
-    return redirect(url_for('login'))
+    return redirect(url_for('dashboard.login'))
 
 # Delete Row
 @dashboard.route('/deleteRow/<string:table>/<string:id>/<string:name>', methods=['POST'])
@@ -124,11 +123,11 @@ def deleteRow(table, id, name):
 
     flash('%s verwijderd'%(name), 'success')
 
-    return redirect(url_for('intranet'))
+    return redirect(url_for('dashboard.intranet'))
 
 def deleteFile(folder, filename):
     filename = folder + "/" + filename
-    return os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    return os.remove(os.path.join(dashboard.config['UPLOAD_FOLDER'], filename))
 
 # Intranet
 @dashboard.route('/intranet')
