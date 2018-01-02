@@ -1,4 +1,5 @@
 {% extends 'layout.html' %}
+{% from "includes/_formhelpers.html" import render_field %}
 
 {% block title %}
 Pas een Leraar aan
@@ -7,7 +8,6 @@ Pas een Leraar aan
 {% block body %}
 
 <h1>Voeg een leerkracht toe</h1>
-{% from "includes/_formhelpers.html" import render_field %}
 <form action="" method="post" enctype="multipart/form-data">
   <div class="form-group">
     <label for="file">Foto</label>

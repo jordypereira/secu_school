@@ -1,7 +1,4 @@
-from flask import Flask, render_template, session, flash
-from flask_mysqldb import MySQL
-from flask_sqlalchemy import SQLAlchemy
-from functools import wraps
+from flask import Flask
 from .extensions import mysql, csrf, toolbar
 
 def create_app():

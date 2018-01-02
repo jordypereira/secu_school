@@ -1,30 +1,14 @@
-from flask import Blueprint, render_template, flash, redirect, url_for, logging, request, session, current_app
+from flask import Blueprint, render_template, flash, redirect, url_for, logging, request, current_app
 from ..forms import LeraarForm
-from os.path import join, dirname, realpath
+from os.path import join
 from ..extensions import mysql
+from ..helpers import deleteFile, is_logged_in, allowed_file
 from werkzeug.utils import secure_filename
-from functools import wraps
+
 
 
 leraar = Blueprint('leraar', __name__, template_folder='../templates/leraar')
 
-
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
-
-# Check if user logged in
-def is_logged_in(f):
-    @wraps(f)
-    def wrap(*args, **kwargs):
-        if 'logged_in' in session:
-            return f(*args, **kwargs)
-        else:
-            flash("Unauthorized, Please login", 'danger')
-            return redirect(url_for('dashboard.login'))
-    return wrap
-# Check the file
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # Add Leraren
 @leraar.route('/add_leraar', methods=['GET', 'POST'])
@@ -103,7 +87,9 @@ def edit_leraar(id):
 
             mysql.connection.commit()
 
-            cur.close()
+            flash('Leraar Updated', 'success')
+
+            return redirect(url_for('dashboard.intranet'))
 
         file = request.files['file']
         filename = file.filename
@@ -117,8 +103,6 @@ def edit_leraar(id):
             cur.execute("UPDATE leraren SET naam=%s, voornaam=%s, email=%s WHERE id = %s", (naam, voornaam, email, id))
 
             mysql.connection.commit()
-
-            cur.close()
 
         # UPLOAD TO DB
         if file and allowed_file(file.filename):
@@ -136,9 +120,8 @@ def edit_leraar(id):
 
             mysql.connection.commit()
 
-            cur.close()
-
         flash('Leraar Updated', 'success')
 
         return redirect(url_for('dashboard.intranet'))
     return render_template('edit_leraar.html', form=form)
+    cur.close()

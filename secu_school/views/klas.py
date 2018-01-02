@@ -1,20 +1,9 @@
-from flask import Blueprint, render_template, flash, redirect, url_for, logging, request, session
+from flask import Blueprint, render_template, flash, redirect, url_for, logging, request
 from ..extensions import mysql, csrf
-from functools import wraps
 from ..forms import KlasForm
+from ..helpers import is_logged_in
 
 klas = Blueprint('klas', __name__, template_folder='../templates/klas')
-
-# Check if user logged in
-def is_logged_in(f):
-    @wraps(f)
-    def wrap(*args, **kwargs):
-        if 'logged_in' in session:
-            return f(*args, **kwargs)
-        else:
-            flash("Unauthorized, Please login", 'danger')
-            return redirect(url_for('dashboard.login'))
-    return wrap
 
 # Add Klas
 @klas.route('/add_klas', methods=['GET', 'POST'])
@@ -71,25 +60,27 @@ def edit_klas(id):
     # Get form
     form = KlasForm()
 
-    # Populate article form fields
+    # Populate form fields
     form.naam.data = klas['naam']
     form.code.data = klas['code']
 
 
     if form.validate_on_submit():
         naam = request.form['naam']
-        omschrijving = request.form['omschrijving']
+        code = request.form['code']
+        richting = request.form['richting']
+        leraar = request.form['leraar']
 
         # Create cursor
         cur = mysql.connection.cursor()
 
-        cur.execute("UPDATE richtingen SET naam=%s, omschrijving=%s WHERE id = %s", (naam, omschrijving, id))
+        cur.execute("UPDATE klassen SET naam=%s, code=%s, richting=%s, leraar=%s WHERE id = %s", (naam, code, richting, leraar, id))
 
         mysql.connection.commit()
 
         cur.close()
 
-        flash('Richting Updated', 'success')
+        flash('Klas Updated', 'success')
 
         return redirect(url_for('dashboard.intranet'))
 

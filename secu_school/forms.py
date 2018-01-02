@@ -24,6 +24,7 @@ class RegisterForm(FlaskForm):
 class LeraarForm(FlaskForm):
     naam = StringField('Naam', validators=[Length(min=1, max=200)])
     voornaam = StringField('Voornaam', validators=[Length(min=1, max=200)])
+    email = StringField('Email', validators=[DataRequired()])
 
 # Contact Form Class
 class ContactForm(FlaskForm):

@@ -1,4 +1,5 @@
 {% extends 'layout.html' %}
+{% from "includes/_formhelpers.html" import render_field %}
 
 {% block title %}
 Pas een Klas aan
@@ -7,7 +8,6 @@ Pas een Klas aan
 {% block body %}
 
 <h1>Pas een Klas aan</h1>
-{% from "includes/_formhelpers.html" import render_field %}
 <form action="" method="post">
   <div class="form-group">
     {{render_field(form.naam, class_="form-control")}}
