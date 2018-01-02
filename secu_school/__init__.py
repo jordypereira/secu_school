@@ -6,7 +6,7 @@ def create_app():
 
     app.config.from_object('config.default')
     app.config.from_pyfile('config.py')
-    app.config.from_object('config.development')
+    app.config.from_object('config.production')
 
     # import secu_school.views
     from .views.home import home
