@@ -4,9 +4,9 @@ from .extensions import mysql, csrf, toolbar
 def create_app():
     app = Flask(__name__, instance_relative_config=True) # , instance_relative_config=True
 
-    app.config.from_object('secu_school.config.default')
-    # app.config.from_pyfile('config.py')
-    app.config.from_object('secu_school.config.production')
+    app.config.from_object('config.default')
+    app.config.from_pyfile('config.py')
+    app.config.from_object('config.production')
 
     # import secu_school.views
     from .views.home import home
