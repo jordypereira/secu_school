@@ -8,9 +8,9 @@ Intranet
 
 <h1><small>Welcome {{session.name}}, to the </small>Intranet</h1>
 <hr>
-<a href="/add_richting" class="btn btn-outline-dark">Voeg een Richting toe</a>
-<a href="/add_leraar" class="btn btn-outline-dark">Voeg een Leraar toe</a>
-<a href="/add_klas" class="btn btn-outline-dark">Voeg een Klas toe</a>
+<a href="{{ url_for('richting.add_richting') }}" class="btn btn-outline-dark">Voeg een Richting toe</a>
+<a href="{{ url_for('leraar.add_leraar') }}" class="btn btn-outline-dark">Voeg een Leraar toe</a>
+<a href="{{ url_for('klas.add_klas') }}" class="btn btn-outline-dark">Voeg een Klas toe</a>
 <hr>
 <div id="accordion" role="tablist">
   <div class="card">
@@ -38,6 +38,7 @@ Intranet
               <td><a href="edit_richting/{{richting.id}}" class="btn btn-warning">Edit</a></td>
               <td>
                 <form action="{{url_for('dashboard.deleteRow', table='richtingen', id=richting.id, name=richting.naam)}}" method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                   <input type="hidden" name="_method" value="DELETE">
                   <input type="submit" value="Delete" class="btn btn-danger">
                 </form>
@@ -68,12 +69,13 @@ Intranet
           </tr>
           {% for leraar in leraren %}
             <tr>
-              <td><img class="mw-150px" src="{{ url_for('dashboard.uploaded_file', folder='leraren', filename=leraar.foto) }}" alt="Foto {{leraar.naam}}{{leraar.voornaam}}"></td>
+              <td><img class="mw-150px" src="{{ url_for('dashboard.uploaded_file', folder='leraren', filename=leraar.foto) }}" alt="Foto {{leraar.naam}} {{leraar.voornaam}}"></td>
               <td>{{leraar.voornaam}} {{leraar.naam}}</td>
               <td>{{leraar.email}}</td>
               <td><a href="edit_leraar/{{leraar.id}}" class="btn btn-warning">Edit</a></td>
               <td>
                 <form action="{{url_for('dashboard.deleteRow', table='leraren', id=leraar.id, name=leraar.naam+" "+leraar.voornaam)}}" method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                   <input type="hidden" name="_method" value="DELETE">
                   <input type="submit" value="Delete" class="btn btn-danger">
                 </form>
@@ -112,6 +114,7 @@ Intranet
               <td><a href="edit_klas/{{klas.id}}" class="btn btn-warning">Edit</a></td>
               <td>
                 <form action="{{url_for('dashboard.deleteRow', table='klassen', id=klas.id, name=klas.naam)}}" method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                   <input type="hidden" name="_method" value="DELETE">
                   <input type="submit" value="Delete" class="btn btn-danger">
                 </form>

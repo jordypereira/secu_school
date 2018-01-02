@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, flash, redirect, url_for, logging, request, session
+from flask import Blueprint, render_template, flash, redirect, url_for, logging, request, session, current_app
 from ..forms import LeraarForm
-import os
+from os.path import join, dirname, realpath
 from ..extensions import mysql
 from werkzeug.utils import secure_filename
 from functools import wraps
@@ -34,7 +34,7 @@ def add_leraar():
     if form.validate_on_submit():
          # check if the post request has the file part
         if 'file' not in request.files:
-            flash('No file part')
+            flash('Geen foto gevonden.', 'danger')
             return redirect(request.url)
 
         file = request.files['file']
@@ -46,13 +46,13 @@ def add_leraar():
         # if user does not select file, browser also
         # submit a empty part without filename
         if file.filename == '':
-            flash('No selected file')
+            flash('Geen foto geselecteerd')
             return redirect(request.url)
 
         # UPLOAD TO DB
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], 'leraren/' + filename))
+            file.save(join(current_app.config['UPLOAD_FOLDER'], 'leraren/' + filename))
             # Create cursor
             cur = mysql.connection.cursor()
 
@@ -123,7 +123,7 @@ def edit_leraar(id):
         # UPLOAD TO DB
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], 'leraren/' + filename))
+            file.save(join(current_app.config['UPLOAD_FOLDER'], 'leraren/' + filename))
 
             # Update db
             cur = mysql.connection.cursor()

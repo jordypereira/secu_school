@@ -23,6 +23,7 @@ Voeg Leraar Toe
     <label for="email">Email address</label>
     <input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
   </div>
+  {{ form.csrf_token }}
   <p><input type="submit" class="btn btn-primary" value="Submit"></p>
 </form>
 

@@ -22,6 +22,7 @@ Pas een Leraar aan
   <div class="form-group">
     {{render_field(form.email, class_="form-control")}}
   </div>
+  {{ form.csrf_token }}
   <p><input type="submit" class="btn btn-primary" value="Submit"></p>
 </form>
 

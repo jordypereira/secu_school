@@ -20,7 +20,7 @@ SET time_zone = "+00:00";
 -- Database: `secu_school`
 --
 CREATE DATABASE IF NOT EXISTS `secu_school` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `secu_school`;
+USE `perjor$secu_school`;
 
 -- --------------------------------------------------------
 

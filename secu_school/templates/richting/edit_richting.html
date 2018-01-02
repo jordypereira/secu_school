@@ -15,6 +15,7 @@ Pas een Richting aan
   <div class="form-group">
     {{render_field(form.omschrijving, class_="form-control", id="editor")}}
   </div>
+  {{ form.csrf_token }}
   <p><input type="submit" class="btn btn-primary" value="Submit"></p>
 </form>
 

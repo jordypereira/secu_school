@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, abort
+from flask import Blueprint, render_template, request, abort, flash, redirect, url_for
 from jinja2 import TemplateNotFound
 from ..forms import ContactForm
 from wtforms import StringField, TextAreaField, PasswordField, Form, validators
@@ -6,6 +6,7 @@ from ..extensions import mysql
 
 
 home = Blueprint('home', __name__, template_folder='../templates/home/')
+
 # Index
 @home.route('/')
 def index():
@@ -47,8 +48,8 @@ def wieiswie():
 # Contact
 @home.route('/contact', methods=['GET', 'POST'])
 def contact():
-    form = ContactForm(request.form)
-    if request.method == 'POST' and form.validate():
+    form = ContactForm()
+    if form.validate_on_submit():
         naam = form.naam.data
         email = form.email.data
         onderwerp = form.onderwerp.data

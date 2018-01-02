@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, logging, request, session
-from ..extensions import mysql
+from ..extensions import mysql, csrf
 from functools import wraps
 from ..forms import KlasForm
 

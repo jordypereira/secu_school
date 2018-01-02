@@ -8,6 +8,11 @@ class KlasForm(FlaskForm):
     naam = StringField('Naam', validators=[DataRequired()])
     code = StringField('Code', validators=[DataRequired()])
 
+# Login Form Class
+class LoginForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[InputRequired()])
+
 # Register Form Class
 class RegisterForm(FlaskForm):
     name = StringField('Naam', validators=[DataRequired()])

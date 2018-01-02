@@ -1,29 +1,29 @@
-from flask import Blueprint, render_template, flash, redirect, url_for, session, logging, request, send_from_directory
-from ..forms import RegisterForm
+from flask import Blueprint, current_app, render_template, flash, redirect, url_for, session, logging, request, send_from_directory
+from ..forms import RegisterForm, LoginForm
 from passlib.hash import sha256_crypt
 from functools import wraps
-
-from wtforms import StringField, PasswordField, Form, validators
+from os.path import join
+from os import remove
 
 from werkzeug.utils import secure_filename
 from ..extensions import mysql
 
 
-dashboard = Blueprint('dashboard', __name__, template_folder='../templates/dashboard')
+dashboard = Blueprint('dashboard', __name__, template_folder='../templates/dashboard', static_folder="../static")
 
 
 # Return upload folder
 @dashboard.route('/uploads/<folder>/<filename>')
 def uploaded_file(folder, filename):
     filename = folder + "/" + filename
-    return send_from_directory(dashboard.config['UPLOAD_FOLDER'], filename)
+    return send_from_directory("static/images/", filename)
 
 
 # User Register
 @dashboard.route('/register', methods=['GET', 'POST'])
 def register():
-    form = RegisterForm(request.form)
-    if request.method == 'POST' and form.validate():
+    form = RegisterForm()
+    if form.validate_on_submit():
         name = form.name.data
         email = form.email.data
         password = sha256_crypt.encrypt(str(form.password.data))
@@ -48,10 +48,10 @@ def register():
 # Login
 @dashboard.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        #Get Form Fields
-        email = request.form['email']
-        password_candidate = request.form['password']
+    form = LoginForm()
+    if form.validate_on_submit():
+        email = form.email.data
+        password_candidate = form.password.data
 
         # Create cursor
         cur = mysql.connection.cursor()
@@ -82,7 +82,7 @@ def login():
             error = 'Email niet gevonden'
             return render_template('login.html', error=error)
 
-    return render_template('login.html')
+    return render_template('login.html', form=form)
 
 # Check if user logged in
 def is_logged_in(f):
@@ -127,7 +127,7 @@ def deleteRow(table, id, name):
 
 def deleteFile(folder, filename):
     filename = folder + "/" + filename
-    return os.remove(os.path.join(dashboard.config['UPLOAD_FOLDER'], filename))
+    return remove(join(current_app.config['UPLOAD_FOLDER'], filename))
 
 # Intranet
 @dashboard.route('/intranet')
