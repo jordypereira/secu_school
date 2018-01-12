@@ -21,6 +21,7 @@ def create_app():
     app.register_blueprint(richting)
     app.register_blueprint(leraar)
 
+
     # init MySQL
     mysql.init_app(app)
     csrf.init_app(app)

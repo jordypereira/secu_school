@@ -143,3 +143,12 @@ def history():
     if 'urls' in session:
         data = session['urls']
     return  render_template('history.html',data=data)
+
+@dashboard.after_app_request
+def store_visited_urls(response):
+    if 'urls' in session:
+        session['urls'].append(request.url)
+        session.modified = True
+    # if len[session['urls']] > 5:
+    #     session['urls'].pop(0)
+    return response

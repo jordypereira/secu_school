@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, abort, flash, redirect, url_for, make_response, request, session
+from flask import Blueprint, render_template, request, abort, flash, redirect, url_for, make_response, session
 from jinja2 import TemplateNotFound
 from ..forms import ContactForm
 from wtforms import StringField, TextAreaField, PasswordField, Form, validators
@@ -93,12 +93,3 @@ def contact():
         return redirect(url_for('home.contact'))
 
     return render_template('contact.html', form=form)
-
-@home.after_app_request
-def store_visited_urls(response):
-    if 'urls' in session:
-        session['urls'].append(request.url)
-        session.modified = True
-    # if len[session['urls']] > 5:
-    #     session['urls'].pop(0)
-    return response
