@@ -7,7 +7,8 @@ Pas een Leraar aan
 
 {% block body %}
 
-<h1>Voeg een leerkracht toe</h1>
+<h1>Pas {{leraar.voornaam}} {{leraar.naam}} aan</h1>
+<img class="mw-150px" src="{{ url_for('dashboard.uploaded_file', folder='leraren', filename=leraar.foto) }}" alt="Foto {{leraar.naam}} {{leraar.voornaam}}">
 <form action="" method="post" enctype="multipart/form-data">
   <div class="form-group">
     <label for="file">Foto</label>

@@ -77,4 +77,4 @@ def edit_richting(id):
         flash('Richting Updated', 'success')
 
         return redirect(url_for('dashboard.intranet'))
-    return render_template('edit_richting.html', form=form)
+    return render_template('edit_richting.html', form=form, richting=richting)

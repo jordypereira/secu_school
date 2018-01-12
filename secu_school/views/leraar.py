@@ -73,6 +73,7 @@ def edit_leraar(id):
     form.voornaam.data = leraar['voornaam']
     form.email.data = leraar['email']
 
+
     if form.validate_on_submit():
         naam = request.form['naam']
         voornaam = request.form['voornaam']
@@ -123,5 +124,5 @@ def edit_leraar(id):
         flash('Leraar Updated', 'success')
 
         return redirect(url_for('dashboard.intranet'))
-    return render_template('edit_leraar.html', form=form)
+    return render_template('edit_leraar.html', form=form, leraar=leraar)
     cur.close()

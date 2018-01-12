@@ -7,7 +7,7 @@ Pas een Klas aan
 
 {% block body %}
 
-<h1>Pas een Klas aan</h1>
+<h1>Pas de klas {{klas.naam}} aan</h1>
 <form action="" method="post">
   <div class="form-group">
     {{render_field(form.naam, class_="form-control")}}
