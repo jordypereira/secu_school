@@ -7,6 +7,7 @@ from os import remove
 
 from werkzeug.utils import secure_filename
 from ..extensions import mysql
+from ..helpers import is_logged_in
 
 
 dashboard = Blueprint('dashboard', __name__, template_folder='../templates/dashboard', static_folder="../static")
@@ -85,17 +86,6 @@ def login():
 
     return render_template('login.html', form=form)
 
-# Check if user logged in
-def is_logged_in(f):
-    @wraps(f)
-    def wrap(*args, **kwargs):
-        if 'logged_in' in session:
-            return f(*args, **kwargs)
-        else:
-            flash("Unauthorized, Please login", 'danger')
-            return redirect(url_for('dashboard.login'))
-    return wrap
-
 # Logout
 @dashboard.route('/logout')
 @is_logged_in
@@ -146,8 +136,9 @@ def intranet():
     return render_template('intranet.html', richtingen=richtingen, leraren=leraren, klassen=klassen)
     cur.close()
 
-@app.route('/history')
-def index():
+@dashboard.route('/history')
+@is_logged_in
+def history():
     data = []
     if 'urls' in session:
         data = session['urls']
