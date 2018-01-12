@@ -60,6 +60,7 @@ def login():
         result = cur.execute("SELECT * FROM users WHERE email = %s", [email])
 
         if result > 0:
+            session['urls'] = []
             # Get stored hash
             data = cur.fetchone()
             password = data['password']
@@ -144,3 +145,10 @@ def intranet():
 
     return render_template('intranet.html', richtingen=richtingen, leraren=leraren, klassen=klassen)
     cur.close()
+
+@app.route('/history')
+def index():
+    data = []
+    if 'urls' in session:
+        data = session['urls']
+    return  render_template('history.html',data=data)

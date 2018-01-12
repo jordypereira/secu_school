@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block body %}
+<h1>History</h1>
+<ul class="list-group">
+  {% for data in data %}
+  <li class="list-item">{{data}}</li>
+  {% enfor %}
+</ul>
+
+{% endblock %}

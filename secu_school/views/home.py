@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, abort, flash, redirect, url_for
+from flask import Blueprint, render_template, request, abort, flash, redirect, url_for, make_response, after_request
 from jinja2 import TemplateNotFound
 from ..forms import ContactForm
 from wtforms import StringField, TextAreaField, PasswordField, Form, validators
@@ -7,10 +7,25 @@ from ..extensions import mysql
 
 home = Blueprint('home', __name__, template_folder='../templates/home/')
 
+@home.after_request
+def store_visted_urls():
+    session['urls'].append(request.url)
+    if len[session['urls'] > 5:
+        session['urls'].pop(0)
+    session.modified = True
+
 # Index
 @home.route('/')
 def index():
-    return render_template('home.html')
+    resp = request.cookies.get('visited')
+    if resp:
+        text = "Welkom terug"
+    else:
+        text= "Welkom"
+        resp = make_response(render_template('home.html', text=text))
+        resp.set_cookie('visited', 'true')
+        return resp
+    return render_template('home.html', text=text)
 
 # Ons Aanbod
 @home.route('/aanbod')
