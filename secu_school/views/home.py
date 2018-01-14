@@ -12,7 +12,7 @@ home = Blueprint('home', __name__, template_folder='../templates/home/')
 @home.route('/')
 def index():
     resp = request.cookies.get('visited')
-    timestamp = None
+    timestamp = 'Goededag'
 
     t = time.strftime("%H:%M:%S")
     (h, m, s) = t.split(':')
